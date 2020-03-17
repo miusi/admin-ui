@@ -1,3 +1,10 @@
+/*
+ * @Description: 
+ * @Author: godric
+ * @Date: 2020-03-17 20:25:25
+ * @LastEditTime: 2020-03-17 23:29:03
+ * @LastEditors: godric
+ */
 import { Reducer } from 'redux';
 import { Effect } from 'dva';
 import { stringify } from 'querystring';
@@ -40,7 +47,7 @@ const Model: LoginModelType = {
         payload: response,
       });
       // Login successfully
-      if (response.status === 'ok') {
+      if (response.success) {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
@@ -76,7 +83,7 @@ const Model: LoginModelType = {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
+      //setAuthority(payload.currentAuthority);
       return {
         ...state,
         status: payload.status,

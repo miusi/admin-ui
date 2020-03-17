@@ -1,3 +1,10 @@
+/*
+ * @Description: 
+ * @Author: godric
+ * @Date: 2020-03-17 20:25:25
+ * @LastEditTime: 2020-03-17 23:18:46
+ * @LastEditors: godric
+ */
 /**
  * request 网络请求工具
  * 更详细的 api 文档: https://github.com/umijs/umi-request
@@ -50,6 +57,9 @@ const errorHandler = (error: { response: Response }): Response => {
  */
 const request = extend({
   errorHandler, // 默认错误处理
+  headers:{
+    
+  },
   credentials: 'include', // 默认请求是否带上cookie
 });
 
