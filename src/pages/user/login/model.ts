@@ -1,9 +1,17 @@
+/*
+ * @Description:
+ * @Author: godric
+ * @Date: 2020-03-17 21:12:43
+ * @LastEditTime: 2020-03-18 23:04:18
+ * @LastEditors: godric
+ */
 import { AnyAction, Reducer } from 'redux';
 import { message } from 'antd';
 import { EffectsCommandMap } from 'dva';
 import { routerRedux } from 'dva/router';
 import { fakeAccountLogin, getFakeCaptcha } from './service';
 import { getPageQuery, setAuthority } from './utils/utils';
+import { setToken } from '@/utils/token';
 
 export interface StateType {
   status?: 'ok' | 'error';
@@ -43,11 +51,11 @@ const Model: ModelType = {
         payload: response,
       });
       // Login successfully
-      if (response.success) {
+      if (response.success === true) {
         message.success('登录成功！');
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
-        let { redirect } = params as { redirect: string };
+        let { redirect } = params as { redirect: string }; 
         if (redirect) {
           const redirectUrlParams = new URL(redirect);
           if (redirectUrlParams.origin === urlParams.origin) {
@@ -59,7 +67,10 @@ const Model: ModelType = {
             window.location.href = redirect;
             return;
           }
+        } else {
+          redirect = '/';
         }
+        console.log(redirect);
         yield put(routerRedux.replace(redirect || '/'));
       }
     },
@@ -71,10 +82,12 @@ const Model: ModelType = {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
+      console.log(payload);
+      setAuthority('admin');
+      setToken(payload.result.token);
       return {
         ...state,
-        status: payload.status,
+        status: payload.success,
         type: payload.type,
       };
     },

@@ -55,7 +55,7 @@ const Login: React.FC<LoginProps> = props => {
 
           <UserName
             name="username"
-            placeholder="用户名: admin or user"
+            placeholder="用户名"
             rules={[
               {
                 required: true,
@@ -65,7 +65,7 @@ const Login: React.FC<LoginProps> = props => {
           />
           <Password
             name="password"
-            placeholder="密码: ant.design"
+            placeholder="密码"
             rules={[
               {
                 required: true,
@@ -74,7 +74,7 @@ const Login: React.FC<LoginProps> = props => {
             ]}
           />
         </Tab>
-        <Tab key="mobile" tab="手机号登录">
+        {/* <Tab key="mobile" tab="手机号登录">
           {status === 'error' && loginType === 'mobile' && !submitting && (
             <LoginMessage content="验证码错误" />
           )}
@@ -105,7 +105,7 @@ const Login: React.FC<LoginProps> = props => {
               },
             ]}
           />
-        </Tab>
+        </Tab> */}
         <div>
           <Checkbox checked={autoLogin} onChange={e => setAutoLogin(e.target.checked)}>
             自动登录

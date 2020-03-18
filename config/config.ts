@@ -122,7 +122,7 @@ export default {
           path: '/',
           component: '../layouts/BasicLayout',
           Routes: ['src/pages/Authorized'],
-          authority: ['admin', 'user'],
+          //authority: ['admin', 'user'],
           routes: [
             {
               path: '/dashboard',
@@ -338,7 +338,7 @@ export default {
             {
               path: '/',
               redirect: '/dashboard/analysis',
-              authority: ['admin', 'user'],
+              //authority: ['admin', 'user'],
             },
             {
               component: '404',
