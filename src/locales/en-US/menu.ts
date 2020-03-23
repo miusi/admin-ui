@@ -1,3 +1,10 @@
+/*
+ * @Description: 
+ * @Author: godric
+ * @Date: 2020-03-17 20:25:25
+ * @LastEditTime: 2020-03-23 23:04:21
+ * @LastEditors: godric
+ */
 export default {
   'menu.welcome': 'Welcome',
   'menu.more-blocks': 'More Blocks',
@@ -48,5 +55,7 @@ export default {
   'menu.editor': 'Graphic Editor',
   'menu.editor.flow': 'Flow Editor',
   'menu.editor.mind': 'Mind Editor',
-  'menu.editor.koni': 'Koni Editor',
+  'menu.editor.koni': 'Koni Editor', 
+  'menu.system':'System Manager',
+  'menu.system.user':'User Manager',
 };

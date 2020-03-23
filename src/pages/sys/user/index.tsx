@@ -2,27 +2,35 @@
 * @Description: 
 * @Author: godric
 * @Date: 2020-03-19 23:35:00
- * @LastEditTime: 2020-03-22 23:40:23
+ * @LastEditTime: 2020-03-23 22:20:20
  * @LastEditors: godric
 */
 
 import { useState, useRef } from "react";
 import ProTable, { ProColumns, ActionType } from "@ant-design/pro-table";
-import { TableListItem } from "@/pages/user/list/data";
+import { TableListItem } from "./data.d";
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { message } from "antd";
+import { message, Button } from "antd";
 import { FormValueType } from "@/pages/user/list/components/UpdateForm";
+import { add, queryList, remove, update } from "./service";
+import CreateForm from "./components/CreateFrom";
+import React from "react";
+import { PlusOutlined } from "@ant-design/icons";
 
 
 /**
- * 添加节点
+ * 添加用户
  * @param fields
  */
 const handleAdd = async (fields: FormValueType) => {
   const hide = message.loading('正在添加');
   try {
-    await addRule({
-      desc: fields.desc,
+    await add({
+      id: fields.id,
+      userName: fields.userName,
+      name: fields.name,
+      phone: fields.phone,
+      password: fields.password
     });
     hide();
     message.success('添加成功');
@@ -34,11 +42,53 @@ const handleAdd = async (fields: FormValueType) => {
   }
 };
 
+/**
+ * 更新
+ * @param fields
+ */
+const handleUpdate = async (fields: FormValueType) => {
+  const hide = message.loading('正在跟新');
+  try {
+    await update({
+      id: fields.id,
+      userName: fields.userName,
+      name: fields.name,
+      phone: fields.phone
+    });
+    hide();
 
+    message.success('配置成功');
+    return true;
+  } catch (error) {
+    hide();
+    message.error('配置失败请重试！');
+    return false;
+  }
+};
+
+
+/**
+ *  删除节点
+ * @param selectedRows
+ */
+const handleRemove = async (selectedRows: TableListItem[]) => {
+  const hide = message.loading('正在删除');
+  if (!selectedRows) return true;
+  try {
+    await remove({
+      key: selectedRows.map(row => row.id),
+    });
+    hide();
+    message.success('删除成功，即将刷新');
+    return true;
+  } catch (error) {
+    hide();
+    message.error('删除失败，请重试');
+    return false;
+  }
+};
 const UserList: React.FC<{}> = () => {
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
-  const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [stepFormValues, setStepFormValues] = useState({});
   const actionRef = useRef<ActionType>();
   const columns: ProColumns<TableListItem>[] = [
     {
@@ -100,39 +150,10 @@ const UserList: React.FC<{}> = () => {
           //TODO 根据权限判断显示的按钮
           <Button icon={<PlusOutlined />} type="primary" onClick={() => handleModalVisible(true)}>
             新建
-                </Button>,
-          selectedRows && selectedRows.length > 0 && (
-            <Dropdown
-              overlay={
-                <Menu
-                  onClick={async e => {
-                    if (e.key === 'remove') {
-                      await handleRemove(selectedRows);
-                      action.reload();
-                    }
-                  }}
-                  selectedKeys={[]}
-                >
-                  <Menu.Item key="remove">批量删除</Menu.Item>
-                  <Menu.Item key="approval">批量审批</Menu.Item>
-                </Menu>
-              }
-            >
-              <Button>
-                批量操作 <DownOutlined />
-              </Button>
-            </Dropdown>
-          ),
+                </Button>
+
         ]}
-        tableAlertRender={(selectedRowKeys, selectedRows) => (
-          <div>
-            已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}</a> 项&nbsp;&nbsp;
-            <span>
-              服务调用次数总计 {selectedRows.reduce((pre, item) => pre + item.callNo, 0)} 万
-                  </span>
-          </div>
-        )}
-        request={params => queryRule(params)}
+        request={params => queryList(params)}
         columns={columns}
         rowSelection={{}}
       />
@@ -149,26 +170,6 @@ const UserList: React.FC<{}> = () => {
         onCancel={() => handleModalVisible(false)}
         modalVisible={createModalVisible}
       />
-      {stepFormValues && Object.keys(stepFormValues).length ? (
-        <UpdateForm
-          onSubmit={async value => {
-            const success = await handleUpdate(value);
-            if (success) {
-              handleModalVisible(false);
-              setStepFormValues({});
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
-          }}
-          onCancel={() => {
-            handleUpdateModalVisible(false);
-            setStepFormValues({});
-          }}
-          updateModalVisible={updateModalVisible}
-          values={stepFormValues}
-        />
-      ) : null}
     </PageHeaderWrapper>
   );
 };
