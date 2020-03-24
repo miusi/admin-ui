@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: godric
  * @Date: 2020-03-17 20:25:25
- * @LastEditTime: 2020-03-17 23:18:46
+ * @LastEditTime: 2020-03-24 23:21:35
  * @LastEditors: godric
  */
 /**
@@ -11,6 +11,7 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
+import { getToken } from './token';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -61,6 +62,18 @@ const request = extend({
     
   },
   credentials: 'include', // 默认请求是否带上cookie
+});
+
+request.interceptors.request.use((url, options) => {
+  const token = getToken();
+  if (token) {
+    options.headers.Authorization = 'Bearer '+ token;
+  }
+
+  return {
+    url,
+    options,
+  };
 });
 
 export default request;
