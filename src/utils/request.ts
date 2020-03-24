@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: godric
  * @Date: 2020-03-17 20:25:25
- * @LastEditTime: 2020-03-24 23:21:35
+ * @LastEditTime: 2020-03-24 23:23:31
  * @LastEditors: godric
  */
 /**
@@ -59,21 +59,10 @@ const errorHandler = (error: { response: Response }): Response => {
 const request = extend({
   errorHandler, // 默认错误处理
   headers:{
-    
+    Authorization : 'Bearer ' +getToken()
   },
   credentials: 'include', // 默认请求是否带上cookie
 });
-
-request.interceptors.request.use((url, options) => {
-  const token = getToken();
-  if (token) {
-    options.headers.Authorization = 'Bearer '+ token;
-  }
-
-  return {
-    url,
-    options,
-  };
-});
+ 
 
 export default request;
