@@ -2,7 +2,7 @@
  * @Description:
  * @Author: godric
  * @Date: 2020-03-17 20:25:25
- * @LastEditTime: 2020-03-28 20:02:32
+ * @LastEditTime: 2020-03-28 23:50:03
  * @LastEditors: godric
  */
 /**
@@ -12,6 +12,7 @@
 import { extend } from 'umi-request';
 import { notification } from 'antd';
 import { stringify } from 'querystring';
+import { routerRedux } from 'dva';
 import { getToken } from './token';
 
 const codeMessage = {
@@ -75,7 +76,7 @@ request.interceptors.response.use(async response => {
     const queryString = stringify({
       redirect: window.location.href,
     });
-    window.location.href = `/user/login?${queryString}`;
+    routerRedux.replace(`/user/login?${queryString}`);
   }
   return response;
 });

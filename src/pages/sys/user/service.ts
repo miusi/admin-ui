@@ -5,7 +5,7 @@ import request from '@/utils/request';
  * @Description:
  * @Author: godric
  * @Date: 2020-03-23 20:18:16
- * @LastEditTime: 2020-03-28 14:54:33
+ * @LastEditTime: 2020-03-28 23:50:55
  * @LastEditors: godric
  */
 const URL_PREFIX = '/api/tiangong/user/';
@@ -60,7 +60,7 @@ export async function update(params: TableListParams) {
  * 禁用启用账号
  * @param params
  */
-export async function toggleStatus(params: { key: number[] }) {
+export async function toggleStatus(params: { key: number }) {
   return request(`${URL_PREFIX + params.key}/toggleStatus`, {
     method: 'PUT',
   });
@@ -76,8 +76,9 @@ export async function resetPassword(params: { key: number[] }) {
   });
 }
 
-export async function remove(params: { key: number[] }) {
-  return request(URL_PREFIX + params.key, {
-    method: 'delete',
+export async function remove(params: { key: number }) {
+  return request(`${URL_PREFIX}remove`, {
+    data: { id: params.key },
+    method: 'POST',
   });
 }

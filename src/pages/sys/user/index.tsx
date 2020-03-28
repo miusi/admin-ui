@@ -2,7 +2,7 @@
  * @Description:
  * @Author: godric
  * @Date: 2020-03-19 23:35:00
- * @LastEditTime: 2020-03-28 22:33:09
+ * @LastEditTime: 2020-03-29 00:25:22
  * @LastEditors: godric
  */
 
@@ -13,7 +13,7 @@ import { message, Button, Divider } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { TableListItem } from './data.d';
 import UpdateForm, { FormValueType } from './components/UpdateForm';
-import { add, queryList, update } from './service';
+import { add, queryList, update, toggleStatus, remove } from './service';
 import CreateForm from './components/CreateFrom';
 
 /**
@@ -59,6 +59,42 @@ const handleUpdate = async (fields: FormValueType) => {
   } catch (error) {
     hide();
     message.error('修改失败请重试！');
+    return false;
+  }
+};
+
+const handleToggleStatus = async (params: { key: number; status: boolean }) => {
+  const hide = message.loading(params.status ? '正在禁用' : '正在启用');
+  try {
+    const data = await toggleStatus(params);
+    hide();
+    if (data.success) {
+      message.success(params.status ? '禁用成功' : '启用成功');
+    } else {
+      message.error(params.status ? '禁用失败' : '启用失败');
+    }
+    return data.success;
+  } catch (error) {
+    hide();
+    message.error(params.status ? '禁用失败请重试！' : '启用失败请重试！');
+    return false;
+  }
+};
+
+const handleRemove = async (params: { key: number }) => {
+  const hide = message.loading('正在删除');
+  try {
+    const data = await remove(params);
+    hide();
+    if (data.success) {
+      message.success('删除成功');
+    } else {
+      message.error('删除失败');
+    }
+    return data.success;
+  } catch (error) {
+    hide();
+    message.error('删除失败请重试！');
     return false;
   }
 };
@@ -130,7 +166,37 @@ const UserList: React.FC<{}> = () => {
             修改
           </a>
           <Divider type="vertical" />
-          {record.status ? <a href="">禁用</a> : <a href="">启用</a>}
+          {record.status ? (
+            <a
+              onClick={() => {
+                handleToggleStatus({
+                  key: record.id,
+                  status: record.status,
+                });
+              }}
+            >
+              禁用
+            </a>
+          ) : (
+            <a
+              onClick={() => {
+                handleToggleStatus({
+                  key: record.id,
+                  status: !record.status,
+                });
+              }}
+            >
+              启用
+            </a>
+          )}
+          <Divider type="vertical" />
+          <a
+            onClick={() => {
+              handleRemove({ key: record.id });
+            }}
+          >
+            删除
+          </a>
         </>
       ),
     },
