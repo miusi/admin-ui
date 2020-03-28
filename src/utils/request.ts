@@ -2,7 +2,7 @@
  * @Description:
  * @Author: godric
  * @Date: 2020-03-17 20:25:25
- * @LastEditTime: 2020-03-24 23:23:31
+ * @LastEditTime: 2020-03-28 20:02:32
  * @LastEditors: godric
  */
 /**
@@ -11,6 +11,7 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
+import { stringify } from 'querystring';
 import { getToken } from './token';
 
 const codeMessage = {
@@ -62,6 +63,21 @@ const request = extend({
     Authorization: `Bearer ${getToken()}`,
   },
   credentials: 'include', // 默认请求是否带上cookie
+});
+
+/**
+ * 对于状态码实际是 200 的错误
+ */
+request.interceptors.response.use(async response => {
+  const data = await response.clone().json();
+
+  if (data && data.code === 3) {
+    const queryString = stringify({
+      redirect: window.location.href,
+    });
+    window.location.href = `/user/login?${queryString}`;
+  }
+  return response;
 });
 
 export default request;
