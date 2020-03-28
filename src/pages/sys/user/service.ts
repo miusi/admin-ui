@@ -1,22 +1,29 @@
-import { TableListParams } from './data';
+import { TableListParams, TableListData } from './data';
 import request from '@/utils/request';
 
 /*
  * @Description:
  * @Author: godric
  * @Date: 2020-03-23 20:18:16
- * @LastEditTime: 2020-03-23 21:18:38
+ * @LastEditTime: 2020-03-28 14:54:33
  * @LastEditors: godric
  */
-const URL_PREFIX = '/api/user/';
+const URL_PREFIX = '/api/tiangong/user/';
 /**
  * 分页查询
  * @param params
  */
 export async function queryList(params?: TableListParams) {
-  return request(URL_PREFIX + 'page', {
+  const data = await request<TableListData>(`${URL_PREFIX}page`, {
     params,
   });
+  const { records } = data;
+  return {
+    data: records,
+    page: data.current,
+    success: true,
+    total: data.total,
+  };
 }
 
 /**
@@ -32,7 +39,7 @@ export async function queryBykey(params: { key: number[] }) {
  * @param params
  */
 export async function add(params: TableListParams) {
-  return request(URL_PREFIX + 'add', {
+  return request(`${URL_PREFIX}add`, {
     method: 'POST',
     data: params,
   });
@@ -43,7 +50,7 @@ export async function add(params: TableListParams) {
  * @param params
  */
 export async function update(params: TableListParams) {
-  return request(URL_PREFIX + 'edit', {
+  return request(`${URL_PREFIX}edit`, {
     method: 'POST',
     data: params,
   });
@@ -54,7 +61,7 @@ export async function update(params: TableListParams) {
  * @param params
  */
 export async function toggleStatus(params: { key: number[] }) {
-  return request(URL_PREFIX + params.key + '/toggleStatus', {
+  return request(`${URL_PREFIX + params.key}/toggleStatus`, {
     method: 'PUT',
   });
 }
@@ -64,7 +71,7 @@ export async function toggleStatus(params: { key: number[] }) {
  * @param params
  */
 export async function resetPassword(params: { key: number[] }) {
-  return request(URL_PREFIX + params.key + '/resetPassword', {
+  return request(`${URL_PREFIX + params.key}/resetPassword`, {
     method: 'PUT',
   });
 }

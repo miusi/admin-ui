@@ -2,12 +2,12 @@
  * @Description:
  * @Author: godric
  * @Date: 2020-03-20 23:46:59
- * @LastEditTime: 2020-03-23 22:13:30
+ * @LastEditTime: 2020-03-28 14:57:24
  * @LastEditors: godric
  */
-export interface TableListItem { 
+export interface TableListItem {
   id: number;
-  userName: string;
+  username: string;
   name: string;
   phone: string;
   password: string;
@@ -25,8 +25,11 @@ export interface TableListPagination {
 }
 
 export interface TableListData {
-  list: TableListItem[];
-  pagination: Partial<TableListPagination>;
+  records: TableListItem[];
+  total: number;
+  long: number;
+  size: number;
+  current: number;
 }
 
 export interface TableListParams {
