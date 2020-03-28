@@ -2,7 +2,7 @@
  * @Description:
  * @Author: godric
  * @Date: 2020-03-19 23:35:00
- * @LastEditTime: 2020-03-29 00:25:22
+ * @LastEditTime: 2020-03-29 00:36:23
  * @LastEditors: godric
  */
 
@@ -63,20 +63,21 @@ const handleUpdate = async (fields: FormValueType) => {
   }
 };
 
-const handleToggleStatus = async (params: { key: number; status: boolean }) => {
-  const hide = message.loading(params.status ? '正在禁用' : '正在启用');
+const handleToggleStatus = async (params: { key: number; status: number }) => {
+  console.log(params);
+  const hide = message.loading(params.status === 1 ? '正在禁用' : '正在启用');
   try {
     const data = await toggleStatus(params);
     hide();
     if (data.success) {
-      message.success(params.status ? '禁用成功' : '启用成功');
+      message.success(params.status === 1 ? '禁用成功' : '启用成功');
     } else {
-      message.error(params.status ? '禁用失败' : '启用失败');
+      message.error(params.status === 1 ? '禁用失败' : '启用失败');
     }
     return data.success;
   } catch (error) {
     hide();
-    message.error(params.status ? '禁用失败请重试！' : '启用失败请重试！');
+    message.error(params.status === 1 ? '禁用失败请重试！' : '启用失败请重试！');
     return false;
   }
 };
@@ -155,7 +156,7 @@ const UserList: React.FC<{}> = () => {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
-      render: (_, record) => (
+      render: (_, record, index, action) => (
         <>
           <a
             onClick={() => {
@@ -173,6 +174,7 @@ const UserList: React.FC<{}> = () => {
                   key: record.id,
                   status: record.status,
                 });
+                action.reload();
               }}
             >
               禁用
@@ -182,8 +184,9 @@ const UserList: React.FC<{}> = () => {
               onClick={() => {
                 handleToggleStatus({
                   key: record.id,
-                  status: !record.status,
+                  status: record.status,
                 });
+                action.reload();
               }}
             >
               启用
@@ -193,6 +196,7 @@ const UserList: React.FC<{}> = () => {
           <a
             onClick={() => {
               handleRemove({ key: record.id });
+              action.reload();
             }}
           >
             删除
