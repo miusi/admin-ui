@@ -1,8 +1,8 @@
 /*
- * @Description: 
+ * @Description:
  * @Author: godric
  * @Date: 2020-03-17 20:25:25
- * @LastEditTime: 2020-03-23 23:04:14
+ * @LastEditTime: 2020-03-29 15:19:30
  * @LastEditors: godric
  */
 export default {
@@ -56,6 +56,7 @@ export default {
   'menu.editor.flow': '流程编辑器',
   'menu.editor.mind': '脑图编辑器',
   'menu.editor.koni': '拓扑编辑器',
-  'menu.system':'系统管理',
-  'menu.system.user':'用户管理',
+  'menu.system': '系统管理',
+  'menu.system.user': '用户管理',
+  'menu.system.dept': '部门管理',
 };
