@@ -5,7 +5,6 @@ import slash from 'slash2';
 import themePluginConfig from './themePluginConfig';
 import proxy from './proxy';
 import webpackPlugin from './plugin.config';
-import component from '@/locales/en-US/component';
 const { pwa } = defaultSettings; // preview.pro.ant.design only do not use in your production ;
 // preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
 
@@ -155,6 +154,12 @@ export default {
               icon: 'setting',
               name: 'system',
               routes: [
+                {
+                  name: 'dept',
+                  icon: 'smile',
+                  path: '/sys/dept',
+                  component: './sys/dept',
+                },
                 {
                   name: 'user',
                   icon: 'smile',
